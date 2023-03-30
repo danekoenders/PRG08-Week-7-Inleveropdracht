@@ -1,17 +1,6 @@
 import { createChart, updateChart } from "./scatterplot.js"
 
-//
-// demo data
-//
-// const data = [
-//         { horsepower: 130, mpg: 18 },
-//         { horsepower: 165, mpg: 15 },
-//         { horsepower: 225, mpg: 14 },
-//         { horsepower: 97, mpg: 18 },
-//         { horsepower: 88, mpg: 27 },
-//         { horsepower: 193, mpg: 9 },
-//         { horsepower: 80, mpg: 25 },
-// ]
+let saveBtn = document.getElementById('saveBtn').addEventListener("click", function() {saveModel(nn)});
 
 //
 // csv data
@@ -26,10 +15,12 @@ function loadData(){
 }
 
 function checkData(data) {
-    // shuffle
+    // shuffle & split
     data.sort(() => (Math.random() - 0.5))
+    let trainData = data.slice(0, Math.floor(data.length * 0.8))
+    let testData = data.slice(Math.floor(data.length * 0.8) + 1)
 
-    const chartdata = data.map(house => ({
+    const chartdata = trainData.map(house => ({
         x: house.gardensize,
         y: house.retailvalue,
     }))
@@ -40,42 +31,48 @@ function checkData(data) {
     // chartjs aanmaken
     createChart(chartdata, "gardensize", "retailvalue")
 
-    neuralNetwork(data);
+    neuralNetwork(trainData, testData);
 }
 
-function neuralNetwork(data) {
+function neuralNetwork(trainData, testData) {
     //
     // Neural Network
     //
     const nn = ml5.neuralNetwork({ task: 'regression', debug: true })
     
     // een voor een de data toevoegen aan het neural network
-    for (let house of data) {
-        nn.addData({ gardensize: house.gardensize }, { retailvalue: house.retailvalue })
+    for (let house of trainData) {
+        nn.addData({ gardensize: house.gardensize, LotLen: house.LotLen, LotWidth: house.LotWidth }, { retailvalue: house.retailvalue })
     }
 
     // normalize
     nn.normalizeData()
     
-    nn.train({ epochs: 10 }, () => finishedTraining(nn)) 
+    nn.train({ epochs: 10 }, () => finishedTraining(nn, testData)) 
 }
 
-async function finishedTraining(nn){
+async function finishedTraining(nn, testData){
     console.log("Finished training!")
 
-    makePrediction(nn);
+    makePrediction(nn, testData);
 }
 
-async function makePrediction(nn) {
-    const results = await nn.predict({ gardensize: 600 })
+async function makePrediction(nn, testData) {
+    const testHouse = { gardensize: testData[0].gardensize, LotLen: testData[0].LotLen, LotWidth: testData[0].LotWidth }
+    const results =  await nn.predict(testHouse);
     console.log(`Geschatte Verkoop Prijs: ${results[0].retailvalue}`)
 
     let predictions = []
-    for (let gardensize = 0; gardensize <= 1200; gardensize += 10) {
-        const pred = await nn.predict({gardensize: gardensize})
-        predictions.push({x: gardensize, y: pred[0].retailvalue})
+    for (let i = 0; i < testData.length; i += 1) {
+        const prediction = await nn.predict({ gardensize: testData[i].gardensize, LotLen: testData[i].LotLen, LotWidth: testData[i].LotWidth })
+        predictions.push({x: testData[i].gardensize, y: prediction[0].retailvalue})
     }
+    
     updateChart("Predictions", predictions)
+}
+
+function saveModel(nn) {
+    nn.save()
 }
 
 // load data

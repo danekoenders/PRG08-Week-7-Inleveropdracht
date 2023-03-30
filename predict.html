@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+
+    <script defer src="predict.js" type="module"></script>
+    <title>ML5 Neural Network Regression</title>
+</head>
+
+<body>
+    <div>
+        <h2>ML5 Neural Network Regression</h2>
+        <h3>Predicting</h3>
+    </div>
+
+    <div>
+        <input type="text" id="gardensize" placeholder="Gardensize" />
+        <input type="text" id="LotLen" placeholder="Lot Lenght" />
+        <input type="text" id="LotWidth" placeholder="Lot width" />
+        <button id="predictBtn">Voorspel de verkoopprijs van het huis!</button>
+    </div>
+
+    <div id="result"></div>
+</body>
+
+</html>

@@ -1,4 +1,4 @@
-ID,Zipcode,Lot-len,Lot-width,Lot-area,House-area,gardensize,Balcony,x-coor,y-coor,Buildyear,bathrooms,taxvalue,retailvalue
+ID,Zipcode,LotLen,LotWidth,Lot-area,House-area,gardensize,Balcony,x-coor,y-coor,Buildyear,bathrooms,taxvalue,retailvalue
 1,3520,42.1,19.7,829,130,732,1,2337,5127,1981,1,212400,276000
 2,3520,23.5,13.6,319,158,263,0,2169,5213,1973,1,152700,210000
 3,3520,37,14.5,536,133,460,1,2042,5106,1983,2,170200,220000

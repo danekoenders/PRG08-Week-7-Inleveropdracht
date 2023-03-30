@@ -1,0 +1,1 @@
+{"inputUnits":[3],"outputUnits":1,"inputs":{"gardensize":{"dtype":"number","min":13,"max":1107},"LotLen":{"dtype":"number","min":5.8,"max":114.6},"LotWidth":{"dtype":"number","min":10,"max":20}},"outputs":{"retailvalue":{"dtype":"number","min":107000,"max":420000}},"isNormalized":true}
